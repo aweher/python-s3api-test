@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random (fake) client data from S3</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        @media (max-width: 600px) {
+            th, td {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Random (fake) client data from S3</h1>
+    <div id="data"></div>
+
+    <script>
+        function fetchData() {
+            $.ajax({
+                url: '/get_data',
+                type: 'GET',
+                success: function(response) {
+                    let html = '<table class="table table-bordered">';
+                    html += '<thead><tr>';
+                    html += '<th>ID</th><th>Nombre</th><th>Apellido</th><th>Dirección</th>';
+                    html += '<th>Localidad</th><th>Provincia</th><th>País</th>';
+                    html += '<th>Teléfono Fijo</th><th>Teléfono Móvil</th><th>Email</th><th>DNI</th><th>Profesión</th>';
+                    html += '</tr></thead>';
+                    for (let item of response) {
+                        html += '<tr>';
+                        html += '<td>' + item['id_cliente'] + '</td>';
+                        html += '<td>' + item['nombre'] + '</td>';
+                        html += '<td>' + item['apellido'] + '</td>';
+                        html += '<td>' + item['direccion'] + '</td>';
+                        html += '<td>' + item['localidad'] + '</td>';
+                        html += '<td>' + item['provincia'] + '</td>';
+                        html += '<td>' + item['pais'] + '</td>';
+                        html += '<td>' + item['telefono_fijo'] + '</td>';
+                        html += '<td>' + item['telefono_movil'] + '</td>';
+                        html += '<td>' + item['email'] + '</td>';
+                        html += '<td>' + item['dni'] + '</td>';
+                        html += '<td>' + item['profesion'] + '</td>';
+                        html += '</tr>';
+                    }
+                    html += '</table>';
+                    $('#data').html(html);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            fetchData(); // Cargar datos inicialmente
+            setInterval(fetchData, 3000);  // Cada 3 segundos
+        });
+    </script>
+</body>
+</html>
